@@ -1,10 +1,15 @@
 import Vue from 'vue'
-import VueToast from 'vue-toast-notification';
-import router from './router'
-import App from './App.vue'
-import api from "./config/api";
-import './assets/styles/style.scss'
 
+import VueToast from 'vue-toast-notification';
+
+import i18n from './i18n'
+
+import router from './router'
+
+import api from "./config/api";
+
+import App from './App';
+import './assets/styles/style.scss'
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.use(VueToast);
@@ -100,8 +105,9 @@ api.interceptors.response.use(
 Vue.prototype.$http = api;
 
 new Vue({
-  render: h => h(App),
   router,
+  i18n,
+  render: h => h(App),
   destroyed:function(){
 	Vue.$toast.clear();
   }

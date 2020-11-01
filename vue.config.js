@@ -7,6 +7,13 @@ module.exports = {
         './src/assets/styles/style.scss',
         './src/assets/styles/variables.scss'
       ]
+    },
+    i18n: {
+      locale: 'fr',
+      fallbackLocale: 'fr',
+      localeDir: 'locales',
+      enableInSFC: false
     }
+
   }
 }

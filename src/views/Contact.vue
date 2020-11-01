@@ -1,17 +1,16 @@
 <template>
-    <router-view></router-view>
+    <div>
+        contact
+    </div>
 </template>
 
 <script>
 
 export default {
-  name: 'App'
+    
 }
 </script>
 
 <style lang="scss">
-*
-{
-  color:$purples;
-}
+
 </style>

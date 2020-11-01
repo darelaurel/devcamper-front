@@ -251,6 +251,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        'Proxima Nova',
         'system-ui',
         '-apple-system',
         'BlinkMacSystemFont',
@@ -299,6 +300,8 @@ module.exports = {
     }),
     inset: {
       '0': '0',
+      '-1':'-1rem',
+      '-2':'-2rem',
       auto: 'auto',
     },
     letterSpacing: {
