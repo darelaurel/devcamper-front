@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import LangSwitcher from '@/components/LangSwitcher.vue'
+import LangSwitcher from './LangSwitcher.vue'
 export default {
     data() {
         return {

@@ -2,11 +2,13 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import i18n from '@/i18n'
 
-import AppContainer from '@/AppContainer'
+import AppContainer from '@/components/AppContainer'
+import Wrapper from '@/components/Wrapper'
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Sidebar from '@/components/Sidebar'
+import AppHeader from '@/components/AppHeader'
 
 import Login from '@/views/auth/Login'
 import Register from '@/views/auth/Register'
@@ -91,7 +93,7 @@ const routes=[
                 path: 'forget-password',
                 name: 'forget-password',
                 components:{
-                    default: lazyLoadComponent(`auth/jForgetPassword`),
+                    default: lazyLoadComponent(`auth/ForgetPassword`),
                     header:Header,
                     footer:Footer
                 } 
@@ -106,44 +108,54 @@ const routes=[
                 } 
             },
             {
-                path: 'dashboard',
-                name: 'dashboard',
-                components:{
-                    default:Dashboard,
-                    sidebar:Sidebar
-                } 
-            },
-            {
-                path: 'bootcamps',
-                name: 'bootcamps',
-                components:
-                {
-                    default:ListBootcamp,
-                    sidebar:Sidebar
-                }, 
-                children: [
+                path: 'app',
+                name: 'app',
+                component:Wrapper,
+                //meta: { requiresAuth: true },
+                children:[
                     {
-                        path: ':id(\\d+)',
-                        name: 'bootcamp',
-                        component:Bootcamp
+                        path: 'dashboard',
+                        name: 'dashboard',
+                        components:{
+                            default:Dashboard,
+                            sidebar:Sidebar,
+                            header:AppHeader
+                        }
                     },
                     {
-                        path: 'add',
-                        name: 'add-bootcamp',
-                        component:AddBootcamp
+                        path: 'bootcamps',
+                        name: 'bootcamps',
+                        components:
+                        {
+                            default:ListBootcamp
+                        }, 
+                        children: [
+                            {
+                                path: ':id(\\d+)',
+                                name: 'bootcamp',
+                                props: to => ({id: Number(to.params.id)}),
+                                component:Bootcamp
+                            },
+                            {
+                                path: 'add',
+                                name: 'add-bootcamp',
+                                component:AddBootcamp,
+                                beforeEnter: (to, from, next) => authRoute(to, from, next,['ADMIN','PUBLISHER'])
+                            },
+                            {
+                                path: 'edit',
+                                name: 'edit-bootcamp',
+                                component:EditBootcamp,
+                                beforeEnter: (to, from, next) => authRoute(to, from, next,['ADMIN','PUBLISHER'])
+                            }
+                        ],
                     },
-                    {
-                        path: 'edit',
-                        name: 'edit-bootcamp',
-                        component:EditBootcamp
-                    }
-                ],
+                ]
             },
         ]
     },
-    
     {
-        path: 'error',
+        path: '/error',
         components: {
             default:NotFound,
             header:Header,
@@ -152,14 +164,36 @@ const routes=[
     },
     {
         path: '*',
-        redirect: `/fr`
+        redirect: `/${i18n.locale}`
     }
 ]
 
 const router = new Router({
     mode: 'history',
-    routes
+    routes,
+    /***
+     * savedPosition available only when we use popstate
+     * back and next button of browser
+     */
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+          return savedPosition
+        } else {
+          return { x: 0, y: 0 }
+        }
+      }
 })
+
+var authRoute=(to,from, next,authType=[])=>{
+    let typeUser=localStorage.getItem('dc-type');
+    if (authType.includes(typeUser)){
+        next();
+    }
+    else
+    {
+        next(false)
+    }
+}
 
 router.beforeEach((to, from, next) => {
     // use the language from the routing param or default language
@@ -170,8 +204,15 @@ router.beforeEach((to, from, next) => {
     }
     // set the current language for i18n.
     i18n.locale = language
-    next()
-  })
+    
+    let token=localStorage.getItem('dc-token');
+    if(!token && to.path.indexOf('app')!=0)
+    {
+        next({path:'/fr/'})
+    }
 
+    next()
+
+})
   
 export default router

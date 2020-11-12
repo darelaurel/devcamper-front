@@ -6,31 +6,32 @@ import i18n from './i18n'
 
 import router from './router'
 
-import api from "./config/api";
+import api from './services/index';
+
+import store from './store/index';
+
+import components from '@/plugins/ui/index'
+
+import loader from '@/plugins/api-loader/index'
 
 import App from './App';
+
 import './assets/styles/style.scss'
+
 import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(components);
+
+Vue.use(loader, {
+	dark: false,
+	//locale: 'en', 
+	loading: false, 
+	background: 'rgb(255,255,255)'
+  });
 
 Vue.use(VueToast);
 
 Vue.config.productionTip = false
-
-api.defaults.timeout = 10000;
-
-api.interceptors.request.use(
-  config => {
-    const token = localStorage.getItem("devcamper-token");
-    if (token) 
-    {
-      config.headers.common["Authorization"] = token;
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);
 
 api.interceptors.response.use(
   response => {
@@ -94,8 +95,7 @@ api.interceptors.response.use(
 				redirect: router.currentRoute.fullPath
 			}
 			});
-		}, 1000);
-        
+		}, 1000);      
       }
       return Promise.reject(error.response);
     }
@@ -107,6 +107,7 @@ Vue.prototype.$http = api;
 new Vue({
   router,
   i18n,
+  store,
   render: h => h(App),
   destroyed:function(){
 	Vue.$toast.clear();

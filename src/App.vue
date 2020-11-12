@@ -1,17 +1,19 @@
 <template>
-    <router-view></router-view>
+	<div>
+		<router-view></router-view>
+	</div>
+		
 </template>
 
 <script>
-
 export default {
-  name: 'App'
+	name: 'Devcamper',
 }
 </script>
 
 <style lang="scss">
 *
 {
-  color:$purples;
+	color:$purples;
 }
 </style>

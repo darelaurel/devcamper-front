@@ -1,5 +1,5 @@
-const path = require('path')
 module.exports = {
+  publicPath: process.env.VUE_APP_BASE_URL,
   pluginOptions: {
     'style-resources-loader': {
       'preProcessor': 'scss',
@@ -14,6 +14,5 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: false
     }
-
   }
 }

@@ -251,6 +251,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        'Poppins',
         'Proxima Nova',
         'system-ui',
         '-apple-system',

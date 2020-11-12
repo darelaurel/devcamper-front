@@ -1,6 +1,13 @@
 {
   "about": {
     "content": "Devcamper is educational plateform which propose bootcamps that contains courses accessible by the users, they can give reviews of courses gived by publishers"
-  }    
+  },   
+  "login":{
+    "title": "We are glad to have you on board",
+    "password":"Password",
+    "sign":"Login",
+    "forget":"Forget password ?",
+    "already":"Have you already account ?"
+  }
 }
   
